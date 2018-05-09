@@ -1,6 +1,13 @@
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+#include <QtWidgets/QApplication>
 
-    return 0;
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+
+
+
+    return app.exec();
 }
