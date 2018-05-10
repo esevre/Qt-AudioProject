@@ -23,9 +23,11 @@ public:
     explicit WidgetPairGrid(QWidget *parent=0);
     void addPair(WidgetPointer, WidgetPointer);
 
+    void setVerticalSpacing(int spacing) { vertical_spacing = spacing; }
+    void setHorizontalSpacing(int spacing) { horizontal_spacing = spacing; }
+
 protected:
     void paintEvent(QPaintEvent *event) override;
-
     void setup_grid_layout();
 
 
@@ -36,6 +38,7 @@ private:
 
     int vertical_spacing = 5;
     int horizontal_spacing = 10;
+
 };
 
 

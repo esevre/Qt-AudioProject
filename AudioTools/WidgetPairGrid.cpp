@@ -2,6 +2,8 @@
 // Created by Erik Sevre on 5/10/18.
 //
 
+#include <iostream>
+
 #include <QtGui/QPainter>
 
 #include "WidgetPairGrid.hpp"
@@ -25,10 +27,7 @@ void WidgetPairGrid::addPair(
 
 void WidgetPairGrid::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
-
-    QPainter painter(this);
     setup_grid_layout();
-
 }
 
 void WidgetPairGrid::setup_grid_layout() {
