@@ -20,6 +20,8 @@ void AudioLevel::setLevel(qreal level) {
     }
 }
 
+/// Draw a fill bar to represent audio level visually on screen
+/// \param event
 void AudioLevel::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
 

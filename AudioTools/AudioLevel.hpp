@@ -21,7 +21,6 @@ protected:
 
 private:
     qreal m_level = 0.0;
-
 };
 
 
