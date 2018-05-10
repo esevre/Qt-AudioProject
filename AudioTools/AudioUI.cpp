@@ -6,8 +6,14 @@
 
 AudioUI::AudioUI(QWidget *parent) : QWidget(parent)
 {
-    deviceSettingsTopGrid = new WidgetPairGrid;
     main_layout = new QVBoxLayout(this);
+    deviceSettingsTopGrid = new WidgetPairGrid;
+    encodingModeBox = new QGroupBox;
+    encodingGridLayout = new QGridLayout(encodingModeBox);
+    controlButtonLayout = new QHBoxLayout;
+    levelsLayout = new QGridLayout;
+    sliderSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
     device_label = new QLabel;
     device_combo_box = new QComboBox;
     codec_label = new QLabel;
@@ -18,6 +24,18 @@ AudioUI::AudioUI(QWidget *parent) : QWidget(parent)
     sample_rate_combo_box = new QComboBox;
     channels_label = new QLabel;
     channels_combo_box = new QComboBox;
+
+    constantQualityButton = new QRadioButton;
+    qualitySlider = new QSlider;
+    constantBitrateButton = new QRadioButton;
+    bitrateComboBox = new QComboBox;
+
+    outputButton = new QPushButton;
+    recordButton = new QPushButton;
+    pauseButton = new QPushButton;
+
+    levelLabel = new QLabel;
+    audioLevel = new AudioLevel;
 
     setup_ui();
     populate_widgets();
@@ -33,6 +51,26 @@ void AudioUI::setup_ui()
     deviceSettingsTopGrid->addPair(channels_label, channels_combo_box);
 
     main_layout->addWidget(deviceSettingsTopGrid);
+
+    encodingGridLayout->addWidget(constantQualityButton, 0, 0, 1, 2);
+    encodingGridLayout->addItem(sliderSpacer, 1, 0, 1, 1);
+    encodingGridLayout->addWidget(qualitySlider, 1, 1, 1, 1);
+    encodingGridLayout->addWidget(constantBitrateButton, 2, 0, 1, 2);
+    encodingGridLayout->addWidget(bitrateComboBox, 3, 1, 1, 1);
+
+    main_layout->addWidget(encodingModeBox);
+
+    controlButtonLayout->addWidget(outputButton);
+    controlButtonLayout->addWidget(recordButton);
+    controlButtonLayout->addWidget(pauseButton);
+
+    main_layout->addLayout(controlButtonLayout);
+
+    levelsLayout->addWidget(levelLabel, 0, 0, 1, 1);
+    levelsLayout->addWidget(audioLevel, 0, 1, 1, 2);
+
+    main_layout->addLayout(levelsLayout);
+
 }
 
 void AudioUI::populate_widgets() {
@@ -48,6 +86,18 @@ void AudioUI::populate_widgets() {
     channels_label->setText(QLabel::tr("Channels:"));
     channels_combo_box->addItem(QComboBox::tr("Default"));
 
+    encodingModeBox->setTitle(QGroupBox::tr("Encoding Mode"));
+    constantQualityButton->setText(QRadioButton::tr("Constant Quality:"));
+    qualitySlider->setOrientation(Qt::Horizontal);
+    constantBitrateButton->setText(QRadioButton::tr("Constant Bitrate"));
+    bitrateComboBox->addItem(QComboBox::tr("Default"));
+
+    outputButton->setText(QPushButton::tr("Output"));
+    recordButton->setText(QPushButton::tr("Record"));
+    pauseButton->setText(QPushButton::tr( "Pause "));
+
+    levelLabel->setText(QLabel::tr("Level:"));
+    audioLevel->setLevel(0.5);
 }
 
 

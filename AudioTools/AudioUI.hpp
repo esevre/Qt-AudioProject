@@ -8,8 +8,14 @@
 #include <QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QPushButton>
 
+
+#include "AudioLevel.hpp"
 #include "WidgetPairGrid.hpp"
+
 
 class AudioUI : public QWidget {
 public:
@@ -18,9 +24,15 @@ public:
     void setup_ui();
     void populate_widgets();
 
-private:
-    WidgetPairGrid *deviceSettingsTopGrid;
+protected:
     QVBoxLayout *main_layout;
+    WidgetPairGrid *deviceSettingsTopGrid;
+    QGridLayout *encodingGridLayout;
+    QGroupBox *encodingModeBox;
+    QHBoxLayout *controlButtonLayout;
+    QGridLayout *levelsLayout;
+
+    QSpacerItem *sliderSpacer;
 
 public:
     QLabel *device_label;
@@ -34,6 +46,17 @@ public:
     QLabel *channels_label;
     QComboBox *channels_combo_box;
 
+    QRadioButton *constantQualityButton;
+    QSlider *qualitySlider;
+    QRadioButton *constantBitrateButton;
+    QComboBox *bitrateComboBox;
+
+    QPushButton *outputButton;
+    QPushButton *recordButton;
+    QPushButton *pauseButton;
+
+    QLabel *levelLabel;
+    AudioLevel *audioLevel;
 
 };
 
