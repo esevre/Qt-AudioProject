@@ -20,7 +20,7 @@ class WidgetPairGrid : public QWidget {
     using LayoutPointer = QGridLayout*;
 
 public:
-    explicit WidgetPairGrid(QWidget *parent=0);
+    explicit WidgetPairGrid(QWidget *parent= nullptr);
     void addPair(WidgetPointer, WidgetPointer);
 
     void setVerticalSpacing(int spacing) { vertical_spacing = spacing; }

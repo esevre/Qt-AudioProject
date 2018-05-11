@@ -6,39 +6,15 @@
 
 #include "AudioUI.hpp"
 
-AudioUI::AudioUI(QWidget *parent) : QWidget(parent)
+AudioUI::AudioUI(QWidget *parent)
+        : QWidget(parent),
+          main_layout(new QVBoxLayout(this)),
+          deviceSettingsTopGrid(new WidgetPairGrid(this)),
+          encodingModeBox(new QGroupBox(this))
 {
-    main_layout = new QVBoxLayout(this);
-    deviceSettingsTopGrid = new WidgetPairGrid(this);
-    encodingModeBox = new QGroupBox(this);
     encodingGridLayout = new QGridLayout(encodingModeBox);
-    controlButtonLayout = new QHBoxLayout;
-    levelsLayout = new QGridLayout;
     sliderSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-    device_label = new QLabel(this);
-    device_combo_box = new QComboBox(this);
-    codec_label = new QLabel(this);
-    codec_combo_box = new QComboBox(this);
-    container_label = new QLabel(this);
-    container_combo_box = new QComboBox(this);
-    sample_rate_label = new QLabel(this);
-    sample_rate_combo_box = new QComboBox(this);
-    channels_label = new QLabel(this);
-    channels_combo_box = new QComboBox(this);
-
-    constantQualityButton = new QRadioButton(this);
-    qualitySlider = new QSlider(this);
-    constantBitrateButton = new QRadioButton(this);
-    bitrateComboBox = new QComboBox(this);
-
-    outputButton = new QPushButton(this);
-    recordButton = new QPushButton(this);
-    pauseButton = new QPushButton(this);
-
-    levelLabel = new QLabel(this);
-    audioLevel = new AudioLevel(this);
-
+    
     setup_ui();
     populate_widgets();
     initial_setup();

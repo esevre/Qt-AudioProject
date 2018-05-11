@@ -12,7 +12,7 @@
 class AudioLevel : public QWidget {
 Q_OBJECT
 public:
-    explicit AudioLevel(QWidget *parent = 0);
+    explicit AudioLevel(QWidget *parent = nullptr);
     // using [0; 1.0] range
     void setLevel(qreal level);
 

@@ -30,10 +30,10 @@ protected:
     WidgetPairGrid *deviceSettingsTopGrid;
     QGridLayout *encodingGridLayout;
     QGroupBox *encodingModeBox;
-    QHBoxLayout *controlButtonLayout;
-    QGridLayout *levelsLayout;
 
-    QSpacerItem *sliderSpacer;
+    QHBoxLayout *controlButtonLayout = new QHBoxLayout;
+    QGridLayout *levelsLayout = new QGridLayout;
+
 
     void setup_ui();
     void initial_setup();
@@ -45,28 +45,30 @@ private:
 
 
 public:
-    QLabel *device_label;
-    QComboBox *device_combo_box;
-    QLabel *codec_label;
-    QComboBox *codec_combo_box;
-    QLabel *container_label;
-    QComboBox *container_combo_box;
-    QLabel *sample_rate_label;
-    QComboBox *sample_rate_combo_box;
-    QLabel *channels_label;
-    QComboBox *channels_combo_box;
+    QLabel *device_label = new QLabel;
+    QComboBox *device_combo_box = new QComboBox;
+    QLabel *codec_label = new QLabel;
+    QComboBox *codec_combo_box = new QComboBox;
+    QLabel *container_label = new QLabel;
+    QComboBox *container_combo_box = new QComboBox;
+    QLabel *sample_rate_label = new QLabel;
+    QComboBox *sample_rate_combo_box = new QComboBox;
+    QLabel *channels_label = new QLabel;
+    QComboBox *channels_combo_box = new QComboBox;
 
-    QRadioButton *constantQualityButton;
-    QSlider *qualitySlider;
-    QRadioButton *constantBitrateButton;
-    QComboBox *bitrateComboBox;
+    QRadioButton *constantQualityButton = new QRadioButton;
+    QSlider *qualitySlider = new QSlider;
+    QRadioButton *constantBitrateButton = new QRadioButton;
+    QComboBox *bitrateComboBox = new QComboBox;
 
-    QPushButton *outputButton;
-    QPushButton *recordButton;
-    QPushButton *pauseButton;
+    QPushButton *outputButton = new QPushButton;
+    QPushButton *recordButton = new QPushButton;
+    QPushButton *pauseButton = new QPushButton;
 
-    QLabel *levelLabel;
-    AudioLevel *audioLevel;
+    QLabel *levelLabel = new QLabel;
+    AudioLevel *audioLevel = new AudioLevel;
+
+    QSpacerItem *sliderSpacer;
 
 };
 

@@ -14,6 +14,5 @@ int main(int argc, char *argv[]) {
 
     myUI.show();
 
-
-    return app.exec();
+    return QApplication::exec();
 }

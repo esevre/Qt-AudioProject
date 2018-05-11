@@ -35,8 +35,8 @@ void WidgetPairGrid::setup_grid_layout() {
         delete grid_layout; // delete old
 
         grid_layout = new QGridLayout(this);
-        grid_layout->setVerticalSpacing(vertical_spacing);
-        grid_layout->setHorizontalSpacing(horizontal_spacing);
+        setVerticalSpacing(vertical_spacing);
+        setHorizontalSpacing(horizontal_spacing);
 
         for (int i = 0; i < pair_vector.size(); ++i) {
             grid_layout->addWidget(pair_vector[i].first, i, 0);
