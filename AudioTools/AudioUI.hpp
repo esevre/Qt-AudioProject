@@ -38,7 +38,7 @@ protected:
     void setup_ui();
     void initial_setup();
     void populate_widgets();
-    
+
 private:
     void selectConstantQuality();
     void selectConstantBitrate();

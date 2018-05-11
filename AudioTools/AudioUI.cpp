@@ -42,7 +42,7 @@ AudioUI::AudioUI(QWidget *parent) : QWidget(parent)
     setup_ui();
     populate_widgets();
     initial_setup();
-    setup_connections();
+
 }
 
 void AudioUI::setup_ui()
@@ -118,14 +118,6 @@ void AudioUI::selectConstantBitrate() {
     qualitySlider->setEnabled(false);
     constantBitrateButton->setChecked(true);
     bitrateComboBox->setEnabled(true);
-
-}
-
-void AudioUI::qualitySliderAdjusted() {
-
-}
-
-void AudioUI::bitrateSelected() {
 
 }
 
