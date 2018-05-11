@@ -68,7 +68,7 @@ public:
     QLabel *levelLabel = new QLabel;
     AudioLevel *audioLevel = new AudioLevel;
 
-    QSpacerItem *sliderSpacer;
+    QSpacerItem *sliderSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
 };
 

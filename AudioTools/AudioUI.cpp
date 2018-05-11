@@ -13,12 +13,10 @@ AudioUI::AudioUI(QWidget *parent)
           encodingModeBox(new QGroupBox(this))
 {
     encodingGridLayout = new QGridLayout(encodingModeBox);
-    sliderSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
-    
+
     setup_ui();
     populate_widgets();
     initial_setup();
-
 }
 
 void AudioUI::setup_ui()
