@@ -1,6 +1,9 @@
 //
 // Created by Erik Sevre on 5/10/18.
 //
+//
+//  todo: add slots and signals for event handling in the UI
+//
 
 #ifndef AUDIOPROJECT_AUDIOUI_HPP
 #define AUDIOPROJECT_AUDIOUI_HPP
@@ -21,8 +24,6 @@ class AudioUI : public QWidget {
 public:
     explicit AudioUI(QWidget *parent=nullptr);
 
-    void setup_ui();
-    void populate_widgets();
 
 protected:
     QVBoxLayout *main_layout;
@@ -33,6 +34,15 @@ protected:
     QGridLayout *levelsLayout;
 
     QSpacerItem *sliderSpacer;
+
+    void setup_ui();
+    void initial_setup();
+    void populate_widgets();
+    
+private:
+    void selectConstantQuality();
+    void selectConstantBitrate();
+
 
 public:
     QLabel *device_label;
