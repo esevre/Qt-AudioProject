@@ -47,6 +47,7 @@ private:
     void updateButtons(bool output, bool record, bool pause);
 
 
+
 private slots:
     void constantQualityButtonToggled(bool val);
     void constantBitrateButtonToggled(bool val);

@@ -18,6 +18,7 @@ AudioUI::AudioUI(QWidget *parent)
     populate_widgets();
     initial_setup();
     connect_components();
+    this->setMinimumSize(225, 375);
 }
 
 void AudioUI::setup_ui()
@@ -78,6 +79,7 @@ void AudioUI::initial_setup()
 {
     selectConstantQuality();
     pauseButton->setEnabled(false);
+    //this->resize(300, 500);
 }
 
 void AudioUI::connect_components() {
@@ -176,6 +178,7 @@ void AudioUI::pauseButtonSelected() {
             break;
     }
 }
+
 
 
 

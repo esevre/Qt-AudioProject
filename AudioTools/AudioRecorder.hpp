@@ -12,6 +12,10 @@
 class AudioRecorder : public QWidget {
 Q_OBJECT
 public:
+    AudioRecorder(QWidget *parent = nullptr);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     AudioUI *ui;
