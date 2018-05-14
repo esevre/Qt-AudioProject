@@ -21,9 +21,11 @@
 
 
 class AudioUI : public QWidget {
+Q_OBJECT
+
 public:
     explicit AudioUI(QWidget *parent=nullptr);
-
+    enum class Status {NONE, RECORDING, PAUSED, STOPPED};
 
 protected:
     QVBoxLayout *main_layout;
@@ -38,10 +40,20 @@ protected:
     void setup_ui();
     void initial_setup();
     void populate_widgets();
-
+    void connect_components();
 private:
     void selectConstantQuality();
     void selectConstantBitrate();
+    void updateButtons(bool output, bool record, bool pause);
+
+
+private slots:
+    void constantQualityButtonToggled(bool val);
+    void constantBitrateButtonToggled(bool val);
+
+    void outputButtonSelected();
+    void recordButtonSelected();
+    void pauseButtonSelected();
 
 
 public:
@@ -69,6 +81,8 @@ public:
     AudioLevel *audioLevel = new AudioLevel;
 
     QSpacerItem *sliderSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+    Status status = Status::NONE;
 
 };
 

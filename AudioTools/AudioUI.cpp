@@ -17,6 +17,7 @@ AudioUI::AudioUI(QWidget *parent)
     setup_ui();
     populate_widgets();
     initial_setup();
+    connect_components();
 }
 
 void AudioUI::setup_ui()
@@ -73,11 +74,43 @@ void AudioUI::populate_widgets()
     audioLevel->setLevel(0.0);
 }
 
-
 void AudioUI::initial_setup()
 {
     selectConstantQuality();
+    pauseButton->setEnabled(false);
+}
 
+void AudioUI::connect_components() {
+    //
+    //  Radio select buttons
+    //
+    connect(constantQualityButton, SIGNAL(toggled(bool)), this, SLOT(constantQualityButtonToggled(bool)));
+    connect(constantBitrateButton, SIGNAL(toggled(bool)), this, SLOT(constantBitrateButtonToggled(bool)));
+
+    //
+    // button selections
+    //
+    connect(recordButton, SIGNAL(clicked()), this, SLOT(recordButtonSelected()));
+    connect(outputButton, SIGNAL(clicked()), this, SLOT(outputButtonSelected()));
+    connect(pauseButton,  SIGNAL(clicked()), this, SLOT(pauseButtonSelected()));
+
+
+}
+
+void AudioUI::constantQualityButtonToggled(bool val) {
+    if (val) {
+        qualitySlider->setEnabled(true);
+        constantBitrateButton->setChecked(false);
+        bitrateComboBox->setEnabled(false);
+    }
+}
+
+void AudioUI::constantBitrateButtonToggled(bool val) {
+    if (val) {
+        constantQualityButton->setChecked(false);
+        qualitySlider->setEnabled(false);
+        bitrateComboBox->setEnabled(true);
+    }
 }
 
 void AudioUI::selectConstantQuality() {
@@ -94,4 +127,61 @@ void AudioUI::selectConstantBitrate() {
     bitrateComboBox->setEnabled(true);
 
 }
+
+void AudioUI::updateButtons(bool output, bool record, bool pause) {
+    outputButton->setEnabled(output);
+    recordButton->setEnabled(record);
+    pauseButton->setEnabled(pause);
+}
+
+void AudioUI::outputButtonSelected() {
+    // open file selection button
+}
+
+void AudioUI::recordButtonSelected() {
+    switch (status) {
+        case Status::NONE:
+            [[fallthrough]];
+        case Status::STOPPED:
+            // start recording
+            // set buttons
+            updateButtons(false, true, true);
+            status = Status::RECORDING;
+            break;
+        case Status::PAUSED:
+            [[fallthrough]];
+        case Status::RECORDING:
+            // stop recording
+            updateButtons(true, true, false);
+            status = Status::STOPPED;
+            break;
+    }
+}
+
+void AudioUI::pauseButtonSelected() {
+    switch (status) {
+        case Status::NONE:
+            [[fallthrough]];
+        case Status::STOPPED:
+            break;
+        case Status::PAUSED:
+            // resume recording
+            updateButtons(false, true, true);
+            status = Status::RECORDING;
+            break;
+        case Status::RECORDING:
+            // pause recording
+            updateButtons(false, true, true);
+            status = Status::PAUSED;
+            break;
+    }
+}
+
+
+
+
+
+
+
+
 
