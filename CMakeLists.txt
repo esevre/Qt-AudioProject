@@ -16,7 +16,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Multimedia)
 
 # build the executable
-add_executable(AudioProject main.cpp AudioTools/AudioLevel.cpp AudioTools/AudioLevel.hpp AudioTools/AudioUI.cpp AudioTools/AudioUI.hpp AudioTools/WidgetPairGrid.cpp AudioTools/WidgetPairGrid.hpp AudioTools/AudioRecorder.cpp AudioTools/AudioRecorder.hpp)
+add_executable(AudioProject main.cpp AudioTools/AudioLevel.cpp AudioTools/AudioLevel.hpp AudioTools/AudioUI.cpp AudioTools/AudioUI.hpp AudioTools/WidgetPairGrid.cpp AudioTools/WidgetPairGrid.hpp AudioTools/AudioRecorder.cpp AudioTools/AudioRecorder.hpp AudioTools/AudioBufferHelper.hpp)
 
 # set the target link libraries
 target_link_libraries(AudioProject Qt5::Widgets Qt5::Multimedia)

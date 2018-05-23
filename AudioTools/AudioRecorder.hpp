@@ -6,19 +6,50 @@
 #define AUDIOPROJECT_AUDIORECORDER_HPP
 
 #include <QtWidgets>
+#include <QAudioProbe>
+#include <QAudioRecorder>
+
+#include <QMainWindow>
+#include <QMediaRecorder>
+
+
+
+#include <vector>
 
 #include "AudioUI.hpp"
+#include "AudioLevel.hpp"
 
-class AudioRecorder : public QWidget {
-Q_OBJECT
+class AudioRecorder : public QMainWindow {
+    Q_OBJECT
 public:
-    AudioRecorder(QWidget *parent = nullptr);
+    explicit AudioRecorder(QWidget *parent = nullptr);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
+public slots:
+    void processBuffer(const QAudioBuffer &);
+
+private slots:
+    void setOutputLocation();
+    void togglePause();
+    void toggleRecord();
+
+    void updateStatus(QMediaRecorder::Status);
+    void onStateChanged(QMediaRecorder::State);
+//    void updateProgress(qint64 pos);
+//    void displayErrorMessage();
+
+
+private:
+    void clearAudioLevels();
+
 private:
     AudioUI *ui;
+    QAudioRecorder *recorder;
+    QAudioProbe *probe;
+    std::vector<AudioLevel> audioLevels;
+    bool output_location_set;
 
 };
 

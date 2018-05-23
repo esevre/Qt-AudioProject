@@ -23,9 +23,9 @@ AudioUI::AudioUI(QWidget *parent)
 
 void AudioUI::setup_ui()
 {
-    deviceSettingsTopGrid->addPair(device_label, device_combo_box);
-    deviceSettingsTopGrid->addPair(codec_label, codec_combo_box);
-    deviceSettingsTopGrid->addPair(container_label, container_combo_box);
+    deviceSettingsTopGrid->addPair(deviceLabel, deviceComboBox);
+    deviceSettingsTopGrid->addPair(codecLabel, codecComboBox);
+    deviceSettingsTopGrid->addPair(containerLabel, container_combo_box);
     deviceSettingsTopGrid->addPair(sample_rate_label, sample_rate_combo_box);
     deviceSettingsTopGrid->addPair(channels_label, channels_combo_box);
     main_layout->addWidget(deviceSettingsTopGrid);
@@ -34,7 +34,7 @@ void AudioUI::setup_ui()
     encodingGridLayout->addItem(sliderSpacer, 1, 0, 1, 1);
     encodingGridLayout->addWidget(qualitySlider, 1, 1, 1, 1);
     encodingGridLayout->addWidget(constantBitrateButton, 2, 0, 1, 2);
-    encodingGridLayout->addWidget(bitrateComboBox, 3, 1, 1, 1);
+    encodingGridLayout->addWidget(bitrate_combo_box, 3, 1, 1, 1);
     main_layout->addWidget(encodingModeBox);
 
     controlButtonLayout->addWidget(outputButton);
@@ -45,27 +45,29 @@ void AudioUI::setup_ui()
     levelsLayout->addWidget(levelLabel, 0, 0, 1, 1);
     levelsLayout->addWidget(audioLevel, 0, 1, 1, 2);
     main_layout->addLayout(levelsLayout);
+
+    main_layout->addWidget(statusBar);
 }
 
 void AudioUI::populate_widgets()
 {
 
-    device_label->setText(QLabel::tr("Device:"));
-    device_combo_box->addItem(QComboBox::tr("Default"));
-    codec_label->setText(QLabel::tr("Codec:"));
-    codec_combo_box->addItem(QComboBox::tr("Default"));
-    container_label->setText(QLabel::tr("Container:"));
-    container_combo_box->addItem(QComboBox::tr("Default"));
+    deviceLabel->setText(QLabel::tr("Device:"));
+    //deviceComboBox->addItem(QComboBox::tr("Default"));
+    codecLabel->setText(QLabel::tr("Codec:"));
+    //codecComboBox->addItem(QComboBox::tr("Default"));
+    containerLabel->setText(QLabel::tr("Container:"));
+    //container_combo_box->addItem(QComboBox::tr("Default"));
     sample_rate_label->setText(QLabel::tr("Sample Rate:"));
-    sample_rate_combo_box->addItem(QComboBox::tr("Default"));
+    //sample_rate_combo_box->addItem(QComboBox::tr("Default"));
     channels_label->setText(QLabel::tr("Channels:"));
-    channels_combo_box->addItem(QComboBox::tr("Default"));
+    //channels_combo_box->addItem(QComboBox::tr("Default"));
 
     encodingModeBox->setTitle(QGroupBox::tr("Encoding Mode"));
     constantQualityButton->setText(QRadioButton::tr("Constant Quality:"));
     qualitySlider->setOrientation(Qt::Horizontal);
     constantBitrateButton->setText(QRadioButton::tr("Constant Bitrate"));
-    bitrateComboBox->addItem(QComboBox::tr("Default"));
+    bitrate_combo_box->addItem(QComboBox::tr("Default"));
 
     outputButton->setText(QPushButton::tr("Output"));
     recordButton->setText(QPushButton::tr("Record"));
@@ -103,7 +105,7 @@ void AudioUI::constantQualityButtonToggled(bool val) {
     if (val) {
         qualitySlider->setEnabled(true);
         constantBitrateButton->setChecked(false);
-        bitrateComboBox->setEnabled(false);
+        bitrate_combo_box->setEnabled(false);
     }
 }
 
@@ -111,7 +113,7 @@ void AudioUI::constantBitrateButtonToggled(bool val) {
     if (val) {
         constantQualityButton->setChecked(false);
         qualitySlider->setEnabled(false);
-        bitrateComboBox->setEnabled(true);
+        bitrate_combo_box->setEnabled(true);
     }
 }
 
@@ -119,14 +121,14 @@ void AudioUI::selectConstantQuality() {
     constantQualityButton->setChecked(true);
     qualitySlider->setEnabled(true);
     constantBitrateButton->setChecked(false);
-    bitrateComboBox->setEnabled(false);
+    bitrate_combo_box->setEnabled(false);
 }
 
 void AudioUI::selectConstantBitrate() {
     constantQualityButton->setChecked(false);
     qualitySlider->setEnabled(false);
     constantBitrateButton->setChecked(true);
-    bitrateComboBox->setEnabled(true);
+    bitrate_combo_box->setEnabled(true);
 
 }
 

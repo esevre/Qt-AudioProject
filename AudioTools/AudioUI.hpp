@@ -14,7 +14,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QPushButton>
-
+#include <QtWidgets/QStatusBar>
 
 #include "AudioLevel.hpp"
 #include "WidgetPairGrid.hpp"
@@ -36,7 +36,6 @@ protected:
     QHBoxLayout *controlButtonLayout = new QHBoxLayout;
     QGridLayout *levelsLayout = new QGridLayout;
 
-
     void setup_ui();
     void initial_setup();
     void populate_widgets();
@@ -46,8 +45,6 @@ private:
     void selectConstantBitrate();
     void updateButtons(bool output, bool record, bool pause);
 
-
-
 private slots:
     void constantQualityButtonToggled(bool val);
     void constantBitrateButtonToggled(bool val);
@@ -56,13 +53,12 @@ private slots:
     void recordButtonSelected();
     void pauseButtonSelected();
 
-
 public:
-    QLabel *device_label = new QLabel;
-    QComboBox *device_combo_box = new QComboBox;
-    QLabel *codec_label = new QLabel;
-    QComboBox *codec_combo_box = new QComboBox;
-    QLabel *container_label = new QLabel;
+    QLabel *deviceLabel = new QLabel;
+    QComboBox *deviceComboBox = new QComboBox;
+    QLabel *codecLabel = new QLabel;
+    QComboBox *codecComboBox = new QComboBox;
+    QLabel *containerLabel = new QLabel;
     QComboBox *container_combo_box = new QComboBox;
     QLabel *sample_rate_label = new QLabel;
     QComboBox *sample_rate_combo_box = new QComboBox;
@@ -72,7 +68,7 @@ public:
     QRadioButton *constantQualityButton = new QRadioButton;
     QSlider *qualitySlider = new QSlider;
     QRadioButton *constantBitrateButton = new QRadioButton;
-    QComboBox *bitrateComboBox = new QComboBox;
+    QComboBox *bitrate_combo_box = new QComboBox;
 
     QPushButton *outputButton = new QPushButton;
     QPushButton *recordButton = new QPushButton;
@@ -85,6 +81,7 @@ public:
 
     Status status = Status::NONE;
 
+    QStatusBar *statusBar = new QStatusBar;
 };
 
 
