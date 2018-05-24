@@ -16,12 +16,30 @@ AudioRecorder::AudioRecorder(QWidget *parent)
 
     querySystemComponents();
 
-    connect(recorder, &QAudioRecorder::statusChanged,  // SIGNAL
-            this, &AudioRecorder::updateStatus);       // SLOTS
 
-    connect(ui->reloadDevicesButton, SIGNAL(clicked()),  // SIGNAL
-            this, SLOT(querySystemComponents()));        // SLOTS
+    connect(recorder, &QAudioRecorder::durationChanged,
+            this, &AudioRecorder::updateProgress);
+    connect(recorder, &QAudioRecorder::statusChanged,
+            this, &AudioRecorder::updateStatus);
+    connect(recorder, &QAudioRecorder::stateChanged,
+            this, &AudioRecorder::onStateChanged);
 
+    connect(recorder, SIGNAL(QAudioRecorder::error(QMediaRecorder::Error)),
+            this, SLOT(displayErrorMessage()));
+
+    connect(ui->reloadDevicesButton, SIGNAL(clicked()),
+            this, SLOT(querySystemComponents()));
+
+}
+
+
+
+void AudioRecorder::updateProgress(qint64 duration) {
+    if (recorder->error() != QMediaRecorder::NoError || duration < 2000) {
+        return;
+    }
+
+    ui->statusBar->showMessage(tr("Recorded %1 sec").arg(duration/1000));
 }
 
 void AudioRecorder::querySystemComponents() {
@@ -185,3 +203,9 @@ void AudioRecorder::toggleRecord() {
         recorder->stop();
     }
 }
+
+void AudioRecorder::displayErrorMessage() {
+    ui->statusBar->showMessage(recorder->errorString());
+
+}
+

@@ -11,7 +11,7 @@
 
 #include <QMainWindow>
 #include <QMediaRecorder>
-
+#include <QUrl>
 
 
 #include <vector>
@@ -40,8 +40,8 @@ private slots:
 
     void updateStatus(QMediaRecorder::Status);
     void onStateChanged(QMediaRecorder::State);
-//    void updateProgress(qint64 pos);
-//    void displayErrorMessage();
+    void updateProgress(qint64 pos);
+    void displayErrorMessage();
 
 
 private:
