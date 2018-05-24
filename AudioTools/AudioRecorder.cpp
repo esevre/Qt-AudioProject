@@ -24,8 +24,8 @@ AudioRecorder::AudioRecorder(QWidget *parent)
     connect(recorder, &QAudioRecorder::stateChanged,
             this, &AudioRecorder::onStateChanged);
 
-    connect(recorder, SIGNAL(QAudioRecorder::error(QMediaRecorder::Error)),
-            this, SLOT(displayErrorMessage()));
+//    connect(recorder, SIGNAL(QAudioRecorder::error()),
+//            this, SLOT(displayErrorMessage()));
 
     connect(ui->reloadDevicesButton, SIGNAL(clicked()),
             this, SLOT(querySystemComponents()));
