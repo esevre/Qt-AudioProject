@@ -24,6 +24,9 @@ class AudioRecorder : public QMainWindow {
 public:
     explicit AudioRecorder(QWidget *parent = nullptr);
 
+public slots:
+    void querySystemComponents();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

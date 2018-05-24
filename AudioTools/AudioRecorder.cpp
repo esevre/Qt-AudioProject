@@ -12,7 +12,20 @@ AudioRecorder::AudioRecorder(QWidget *parent)
     // Setup UI
     ui = new AudioUI(this);
     this->setMinimumSize(ui->size());
+    this->resize(300, 500);
 
+    querySystemComponents();
+
+    connect(recorder, &QAudioRecorder::statusChanged,  // SIGNAL
+            this, &AudioRecorder::updateStatus);       // SLOTS
+
+    connect(ui->reloadDevicesButton, SIGNAL(clicked()),  // SIGNAL
+            this, SLOT(querySystemComponents()));        // SLOTS
+
+}
+
+void AudioRecorder::querySystemComponents() {
+    std::cout << "query the system components\n";
     // Setup recorder and probe
     recorder = new QAudioRecorder(this);
     probe = new QAudioProbe(this);
@@ -20,6 +33,14 @@ AudioRecorder::AudioRecorder(QWidget *parent)
             this, &AudioRecorder::processBuffer);
     probe->setSource(recorder);
 
+    // clear out the combo boxes
+    ui->deviceComboBox->clear();
+    ui->codecComboBox->clear();
+    ui->containerComboBox->clear();
+    ui->sampleRateComboBox->clear();
+    ui->channelsComboBox->clear();
+    ui->bitrateComboBox->clear();
+    
 
     // audio devices
     ui->deviceComboBox->addItem(tr("Default"), QVariant(QString()));
@@ -34,20 +55,35 @@ AudioRecorder::AudioRecorder(QWidget *parent)
     }
 
     // containers
-    ui->container_combo_box->addItem(tr("Default"), QVariant(QString()));
+    ui->containerComboBox->addItem(tr("Default"), QVariant(QString()));
     for (auto &containerName : recorder->supportedContainers()) {
-        ui->container_combo_box->addItem(containerName, QVariant(containerName));
+        ui->containerComboBox->addItem(containerName, QVariant(containerName));
     }
 
     // sample rate
-    ui->sample_rate_combo_box->addItem(tr("Default"), QVariant(QString()));
+    ui->sampleRateComboBox->addItem(tr("Default"), QVariant(QString()));
     for (auto sampleRate : recorder->supportedAudioSampleRates()){
-        ui->sample_rate_combo_box->addItem(QString::number(sampleRate), QVariant(sampleRate));
+        ui->sampleRateComboBox->addItem(QString::number(sampleRate), QVariant(sampleRate));
     }
 
+    // channels
+    ui->channelsComboBox->addItem(tr("Default"), QVariant(-1));
+    ui->channelsComboBox->addItem(tr("1"), QVariant(1));
+    ui->channelsComboBox->addItem(tr("2"), QVariant(2));
+    ui->channelsComboBox->addItem(tr("3"), QVariant(4));
 
-    connect(recorder, &QAudioRecorder::statusChanged,
-            this, &AudioRecorder::updateStatus);
+    // quality
+    ui->qualitySlider->setRange(0, int(QMultimedia::VeryHighQuality));
+    ui->qualitySlider->setValue(int(QMultimedia::NormalQuality));
+
+    // bitrates
+    ui->bitrateComboBox->addItem(tr("Default"), QVariant(0));
+    ui->bitrateComboBox->addItem(tr("32000"), QVariant(32000));
+    ui->bitrateComboBox->addItem(tr("64000"), QVariant(64000));
+    ui->bitrateComboBox->addItem(tr("96000"), QVariant(96000));
+    ui->bitrateComboBox->addItem(tr("128000"), QVariant(128000));
+
+
 
 }
 
@@ -135,15 +171,15 @@ void AudioRecorder::toggleRecord() {
 
         QAudioEncoderSettings settings;
         settings.setCodec(boxValue(ui->codecComboBox).toString());
-        settings.setSampleRate(boxValue(ui->sample_rate_combo_box).toInt());
-        settings.setBitRate(boxValue(ui->bitrate_combo_box).toInt());
-        settings.setChannelCount(boxValue(ui->channels_combo_box).toInt());
+        settings.setSampleRate(boxValue(ui->sampleRateComboBox).toInt());
+        settings.setBitRate(boxValue(ui->bitrateComboBox).toInt());
+        settings.setChannelCount(boxValue(ui->channelsComboBox).toInt());
         settings.setQuality(QMultimedia::EncodingQuality(ui->qualitySlider->value()));
         settings.setEncodingMode(ui->constantQualityButton->isChecked() ?
                                  QMultimedia::ConstantQualityEncoding :
                                  QMultimedia::ConstantBitRateEncoding);
 
-        QString container = boxValue(ui->container_combo_box).toString();
+        QString container = boxValue(ui->containerComboBox).toString();
 
         recorder->setEncodingSettings(settings, QVideoEncoderSettings(), container);
         recorder->record();

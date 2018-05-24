@@ -8,7 +8,7 @@
 
 AudioUI::AudioUI(QWidget *parent)
         : QWidget(parent),
-          main_layout(new QVBoxLayout(this)),
+          mainLayout(new QVBoxLayout(this)),
           deviceSettingsTopGrid(new WidgetPairGrid(this)),
           encodingModeBox(new QGroupBox(this))
 {
@@ -25,56 +25,54 @@ void AudioUI::setup_ui()
 {
     deviceSettingsTopGrid->addPair(deviceLabel, deviceComboBox);
     deviceSettingsTopGrid->addPair(codecLabel, codecComboBox);
-    deviceSettingsTopGrid->addPair(containerLabel, container_combo_box);
-    deviceSettingsTopGrid->addPair(sample_rate_label, sample_rate_combo_box);
-    deviceSettingsTopGrid->addPair(channels_label, channels_combo_box);
-    main_layout->addWidget(deviceSettingsTopGrid);
+    deviceSettingsTopGrid->addPair(containerLabel, containerComboBox);
+    deviceSettingsTopGrid->addPair(sampleRateLabel, sampleRateComboBox);
+    deviceSettingsTopGrid->addPair(channelsLabel, channelsComboBox);
+    mainLayout->addWidget(deviceSettingsTopGrid);
 
     encodingGridLayout->addWidget(constantQualityButton, 0, 0, 1, 2);
     encodingGridLayout->addItem(sliderSpacer, 1, 0, 1, 1);
     encodingGridLayout->addWidget(qualitySlider, 1, 1, 1, 1);
     encodingGridLayout->addWidget(constantBitrateButton, 2, 0, 1, 2);
-    encodingGridLayout->addWidget(bitrate_combo_box, 3, 1, 1, 1);
-    main_layout->addWidget(encodingModeBox);
+    encodingGridLayout->addWidget(bitrateComboBox, 3, 1, 1, 1);
+    mainLayout->addWidget(encodingModeBox);
 
     controlButtonLayout->addWidget(outputButton);
     controlButtonLayout->addWidget(recordButton);
     controlButtonLayout->addWidget(pauseButton);
-    main_layout->addLayout(controlButtonLayout);
+    mainLayout->addLayout(controlButtonLayout);
 
     levelsLayout->addWidget(levelLabel, 0, 0, 1, 1);
     levelsLayout->addWidget(audioLevel, 0, 1, 1, 2);
-    main_layout->addLayout(levelsLayout);
+    mainLayout->addLayout(levelsLayout);
 
-    main_layout->addWidget(statusBar);
+    mainLayout->addWidget(statusBar);
+    mainLayout->addWidget(reloadDevicesButton);
 }
 
 void AudioUI::populate_widgets()
 {
 
     deviceLabel->setText(QLabel::tr("Device:"));
-    //deviceComboBox->addItem(QComboBox::tr("Default"));
     codecLabel->setText(QLabel::tr("Codec:"));
-    //codecComboBox->addItem(QComboBox::tr("Default"));
     containerLabel->setText(QLabel::tr("Container:"));
-    //container_combo_box->addItem(QComboBox::tr("Default"));
-    sample_rate_label->setText(QLabel::tr("Sample Rate:"));
-    //sample_rate_combo_box->addItem(QComboBox::tr("Default"));
-    channels_label->setText(QLabel::tr("Channels:"));
-    //channels_combo_box->addItem(QComboBox::tr("Default"));
+    sampleRateLabel->setText(QLabel::tr("Sample Rate:"));
+    channelsLabel->setText(QLabel::tr("Channels:"));
 
     encodingModeBox->setTitle(QGroupBox::tr("Encoding Mode"));
     constantQualityButton->setText(QRadioButton::tr("Constant Quality:"));
     qualitySlider->setOrientation(Qt::Horizontal);
     constantBitrateButton->setText(QRadioButton::tr("Constant Bitrate"));
-    bitrate_combo_box->addItem(QComboBox::tr("Default"));
+    bitrateComboBox->addItem(QComboBox::tr("Default"));
 
     outputButton->setText(QPushButton::tr("Output"));
     recordButton->setText(QPushButton::tr("Record"));
     pauseButton->setText(QPushButton::tr( "Pause "));
 
     levelLabel->setText(QLabel::tr("Level:"));
-    audioLevel->setLevel(0.0);
+
+    reloadDevicesButton->setText(QPushButton::tr("Reload Devices"));
+
 }
 
 void AudioUI::initial_setup()
@@ -105,7 +103,7 @@ void AudioUI::constantQualityButtonToggled(bool val) {
     if (val) {
         qualitySlider->setEnabled(true);
         constantBitrateButton->setChecked(false);
-        bitrate_combo_box->setEnabled(false);
+        bitrateComboBox->setEnabled(false);
     }
 }
 
@@ -113,7 +111,7 @@ void AudioUI::constantBitrateButtonToggled(bool val) {
     if (val) {
         constantQualityButton->setChecked(false);
         qualitySlider->setEnabled(false);
-        bitrate_combo_box->setEnabled(true);
+        bitrateComboBox->setEnabled(true);
     }
 }
 
@@ -121,14 +119,14 @@ void AudioUI::selectConstantQuality() {
     constantQualityButton->setChecked(true);
     qualitySlider->setEnabled(true);
     constantBitrateButton->setChecked(false);
-    bitrate_combo_box->setEnabled(false);
+    bitrateComboBox->setEnabled(false);
 }
 
 void AudioUI::selectConstantBitrate() {
     constantQualityButton->setChecked(false);
     qualitySlider->setEnabled(false);
     constantBitrateButton->setChecked(true);
-    bitrate_combo_box->setEnabled(true);
+    bitrateComboBox->setEnabled(true);
 
 }
 

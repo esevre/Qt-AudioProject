@@ -28,7 +28,7 @@ public:
     enum class Status {NONE, RECORDING, PAUSED, STOPPED};
 
 protected:
-    QVBoxLayout *main_layout;
+    QVBoxLayout *mainLayout;
     WidgetPairGrid *deviceSettingsTopGrid;
     QGridLayout *encodingGridLayout;
     QGroupBox *encodingModeBox;
@@ -59,16 +59,16 @@ public:
     QLabel *codecLabel = new QLabel;
     QComboBox *codecComboBox = new QComboBox;
     QLabel *containerLabel = new QLabel;
-    QComboBox *container_combo_box = new QComboBox;
-    QLabel *sample_rate_label = new QLabel;
-    QComboBox *sample_rate_combo_box = new QComboBox;
-    QLabel *channels_label = new QLabel;
-    QComboBox *channels_combo_box = new QComboBox;
+    QComboBox *containerComboBox = new QComboBox;
+    QLabel *sampleRateLabel = new QLabel;
+    QComboBox *sampleRateComboBox = new QComboBox;
+    QLabel *channelsLabel = new QLabel;
+    QComboBox *channelsComboBox = new QComboBox;
 
     QRadioButton *constantQualityButton = new QRadioButton;
     QSlider *qualitySlider = new QSlider;
     QRadioButton *constantBitrateButton = new QRadioButton;
-    QComboBox *bitrate_combo_box = new QComboBox;
+    QComboBox *bitrateComboBox = new QComboBox;
 
     QPushButton *outputButton = new QPushButton;
     QPushButton *recordButton = new QPushButton;
@@ -82,6 +82,9 @@ public:
     Status status = Status::NONE;
 
     QStatusBar *statusBar = new QStatusBar;
+
+    QPushButton *reloadDevicesButton = new QPushButton;
+
 };
 
 
