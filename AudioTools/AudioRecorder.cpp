@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+
+
+
 AudioRecorder::AudioRecorder(QWidget *parent)
         : QMainWindow(parent)
 {
