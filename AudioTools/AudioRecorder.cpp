@@ -25,7 +25,6 @@ AudioRecorder::AudioRecorder(QWidget *parent)
 }
 
 void AudioRecorder::querySystemComponents() {
-    std::cout << "query the system components\n";
     // Setup recorder and probe
     recorder = new QAudioRecorder(this);
     probe = new QAudioProbe(this);
@@ -40,7 +39,7 @@ void AudioRecorder::querySystemComponents() {
     ui->sampleRateComboBox->clear();
     ui->channelsComboBox->clear();
     ui->bitrateComboBox->clear();
-    
+
 
     // audio devices
     ui->deviceComboBox->addItem(tr("Default"), QVariant(QString()));
@@ -82,8 +81,6 @@ void AudioRecorder::querySystemComponents() {
     ui->bitrateComboBox->addItem(tr("64000"), QVariant(64000));
     ui->bitrateComboBox->addItem(tr("96000"), QVariant(96000));
     ui->bitrateComboBox->addItem(tr("128000"), QVariant(128000));
-
-
 
 }
 
