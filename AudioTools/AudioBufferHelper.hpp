@@ -6,14 +6,18 @@
 
 #include <QAudioProbe>
 #include <QVector>
-
-
+#include <vector>
+#include <algorithm>
 
 
 qreal getPeakValue(const QAudioFormat& format);
-QVector<qreal> getBufferLevels(const QAudioBuffer& buffer);
+//QVector<qreal> getBufferLevels(const QAudioBuffer& buffer);
+std::vector<qreal> getBufferLevels(const QAudioBuffer& buffer);
+
+//template <class T>
+//QVector<qreal> getBufferLevels(const T *buffer, int frames, int channels);
 template <class T>
-QVector<qreal> getBufferLevels(const T *buffer, int frames, int channels);
+std::vector<qreal> getBufferLevels(const T *buffer, int frames, int channels);
 
 
 
@@ -56,9 +60,9 @@ qreal getPeakValue(const QAudioFormat& format)
 }
 
 // returns the audio level for each channel
-QVector<qreal> getBufferLevels(const QAudioBuffer& buffer)
+std::vector<qreal> getBufferLevels(const QAudioBuffer& buffer)
 {
-    QVector<qreal> values;
+    std::vector<qreal> values;
 
     if (!buffer.format().isValid() || buffer.format().byteOrder() != QAudioFormat::LittleEndian)
         return values;
@@ -67,7 +71,9 @@ QVector<qreal> getBufferLevels(const QAudioBuffer& buffer)
         return values;
 
     int channelCount = buffer.format().channelCount();
-    values.fill(0, channelCount);    // fill vector with zero values
+    values.resize(static_cast<size_t>(channelCount));
+    std::fill(values.begin(), values.end(), 0);
+    //values.fill(0, channelCount);    // fill vector with zero values
 
     qreal peak_value = getPeakValue(buffer.format());
     if (qFuzzyCompare(peak_value, qreal(0)))
@@ -111,16 +117,18 @@ QVector<qreal> getBufferLevels(const QAudioBuffer& buffer)
 }
 
 template <class T>
-QVector<qreal> getBufferLevels(const T *buffer, int frames, int channels)
+std::vector<qreal> getBufferLevels(const T *buffer, int frames, int channels)
 {
-    QVector<qreal> max_values;
-    max_values.fill(0, channels);
+    std::vector<qreal> max_values(channels);
+    std::fill(max_values.begin(), max_values.end(), 0);
+    //max_values.fill(0, channels);
 
     for (int i = 0; i < frames; ++i) {
         for (int j = 0; j < channels; ++j) {
             qreal value = qAbs(qreal(buffer[i * channels + j]));
             if (value > max_values.at(j))
-                max_values.replace(j, value);
+                //max_values.replace(j, value);
+                max_values[j] = value;
         }
     }
 
