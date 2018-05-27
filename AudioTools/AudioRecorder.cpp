@@ -3,10 +3,16 @@
 //
 
 #include "AudioRecorder.hpp"
+#include "AudioBufferHelper.hpp"
 
 #include <iostream>
 
-
+#include <QAudioProbe>
+#include <QAudioRecorder>
+#include <QDir>
+#include <QFileDialog>
+#include <QMediaRecorder>
+#include <QStandardPaths>
 
 
 AudioRecorder::AudioRecorder(QWidget *parent)
@@ -17,8 +23,10 @@ AudioRecorder::AudioRecorder(QWidget *parent)
     this->setMinimumSize(ui->size());
     this->resize(300, 500);
 
+
     querySystemComponents();
 
+    setupRecordingConnections();
 
     connect(recorder, &QAudioRecorder::durationChanged,
             this, &AudioRecorder::updateProgress);
@@ -36,7 +44,6 @@ AudioRecorder::AudioRecorder(QWidget *parent)
 }
 
 
-
 void AudioRecorder::updateProgress(qint64 duration) {
     if (recorder->error() != QMediaRecorder::NoError || duration < 2000) {
         return;
@@ -48,10 +55,12 @@ void AudioRecorder::updateProgress(qint64 duration) {
 void AudioRecorder::querySystemComponents() {
     // Setup recorder and probe
     recorder = new QAudioRecorder(this);
+
     probe = new QAudioProbe(this);
     connect(probe, &QAudioProbe::audioBufferProbed,
             this, &AudioRecorder::processBuffer);
     probe->setSource(recorder);
+
 
     // clear out the combo boxes
     ui->deviceComboBox->clear();
@@ -60,7 +69,6 @@ void AudioRecorder::querySystemComponents() {
     ui->sampleRateComboBox->clear();
     ui->channelsComboBox->clear();
     ui->bitrateComboBox->clear();
-
 
     // audio devices
     ui->deviceComboBox->addItem(tr("Default"), QVariant(QString()));
@@ -105,48 +113,23 @@ void AudioRecorder::querySystemComponents() {
 
 }
 
-void AudioRecorder::resizeEvent(QResizeEvent *event) {
-    ui->resize(event->size());
-}
-
-void AudioRecorder::processBuffer(const QAudioBuffer &buffer) {
-
-}
-
-void AudioRecorder::clearAudioLevels() {
-    for (int i = 0; i < audioLevels.size(); ++i) {
-        audioLevels.at(i).setLevel(0);
-    }
-}
-
-
-void AudioRecorder::setOutputLocation() {
-    QString fileName = QFileDialog::getSaveFileName();
-    recorder->setOutputLocation(QUrl::fromLocalFile(fileName));
-    output_location_set = true;
-}
-
-void AudioRecorder::togglePause() {
-
-}
-
 void AudioRecorder::updateStatus(QMediaRecorder::Status status) {
     QString statusMessage;
 
     switch (status) {
-    case QMediaRecorder::RecordingStatus:
-        statusMessage = tr("Recording to %1").arg(recorder->actualLocation().toString());
-        break;
-    case QMediaRecorder::PausedStatus:
-        clearAudioLevels();
-        statusMessage = tr("Paused");
-        break;
-    case QMediaRecorder::UnloadedStatus:
-    case QMediaRecorder::LoadedStatus:
-        clearAudioLevels();
-        statusMessage = tr("Stopped");
-    default:
-        break;
+        case QMediaRecorder::RecordingStatus:
+            statusMessage = tr("Recording to %1").arg(recorder->actualLocation().toString());
+            break;
+        case QMediaRecorder::PausedStatus:
+            clearAudioLevels();
+            statusMessage = tr("Paused");
+            break;
+        case QMediaRecorder::UnloadedStatus:
+        case QMediaRecorder::LoadedStatus:
+            clearAudioLevels();
+            statusMessage = tr("Stopped");
+        default:
+            break;
     }
 
     if (recorder->error() == QMediaRecorder::NoError) {
@@ -157,25 +140,24 @@ void AudioRecorder::updateStatus(QMediaRecorder::Status status) {
 
 void AudioRecorder::onStateChanged(QMediaRecorder::State state) {
     switch (state) {
-    case QMediaRecorder::RecordingState:
-        ui->recordButton->setText(tr("Stop"));
-        ui->pauseButton->setText(tr("Pause"));
-        break;
-    case QMediaRecorder::PausedState:
-        ui->recordButton->setText(tr("Stop"));
-        ui->pauseButton->setText(tr("Resume"));
-        break;
-    case QMediaRecorder::StoppedState:
-        ui->recordButton->setText(tr("Record"));
-        ui->pauseButton->setText(tr("Pause"));
-        break;
+        case QMediaRecorder::RecordingState:
+            ui->recordButton->setText(tr("Stop"));
+            ui->pauseButton->setText(tr("Pause"));
+            break;
+        case QMediaRecorder::PausedState:
+            ui->recordButton->setText(tr("Stop"));
+            ui->pauseButton->setText(tr("Resume"));
+            break;
+        case QMediaRecorder::StoppedState:
+            ui->recordButton->setText(tr("Record"));
+            ui->pauseButton->setText(tr("Pause"));
+            break;
     }
-    ui->pauseButton->setEnabled(recorder->state() != QMediaRecorder::StoppedState);
 
+    ui->pauseButton->setEnabled(recorder->state() != QMediaRecorder::StoppedState);
 }
 
-static QVariant boxValue(const QComboBox *box)
-{
+static QVariant boxValue(const QComboBox *box) {
     int idx = box->currentIndex();
     if (idx == -1){
         return QVariant();
@@ -188,6 +170,7 @@ void AudioRecorder::toggleRecord() {
         recorder->setAudioInput(boxValue(ui->deviceComboBox).toString());
 
         QAudioEncoderSettings settings;
+
         settings.setCodec(boxValue(ui->codecComboBox).toString());
         settings.setSampleRate(boxValue(ui->sampleRateComboBox).toInt());
         settings.setBitRate(boxValue(ui->bitrateComboBox).toInt());
@@ -200,15 +183,83 @@ void AudioRecorder::toggleRecord() {
         QString container = boxValue(ui->containerComboBox).toString();
 
         recorder->setEncodingSettings(settings, QVideoEncoderSettings(), container);
+        std::cout << "starting recording:\n";
         recorder->record();
+
     }
     else {
         recorder->stop();
     }
 }
 
-void AudioRecorder::displayErrorMessage() {
-    ui->statusBar->showMessage(recorder->errorString());
+void AudioRecorder::togglePause() {
 
 }
+
+void AudioRecorder::setOutputLocation() {
+#ifdef Q_OS_WINRT
+    // UWP does not allow to store outside the sandbox
+    const QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!QDir().mkpath(cacheDir)) {
+        qWarning() << "Failed to create cache directory";
+        return;
+    }
+    QString fileName = cacheDir + QLatin1String("/output.wav");
+#else
+    QString fileName = QFileDialog::getSaveFileName();
+#endif
+
+    recorder->setOutputLocation(QUrl::fromLocalFile(fileName));
+    output_location_set = true;
+
+}
+
+void AudioRecorder::displayErrorMessage() {
+    ui->statusBar->showMessage(recorder->errorString());
+}
+
+void AudioRecorder::clearAudioLevels() {
+    for (int i = 0; i < audioLevels.size(); ++i) {
+        audioLevels.at(i).setLevel(0);
+    }
+}
+
+
+void AudioRecorder::resizeEvent(QResizeEvent *event) {
+    ui->resize(event->size());
+}
+
+void AudioRecorder::processBuffer(const QAudioBuffer &buffer) {
+    if (audioLevels.size() != buffer.format().channelCount()) {
+
+    }
+
+    auto levels = getBufferLevels(buffer);
+    for (int i = 0; i < levels.size(); ++i) {
+        //audioLevels.at(i)->setLevel(levels.at(i));
+        audioLevels[i].setLevel((levels[i]));
+    }
+}
+
+
+void AudioRecorder::setupRecordingConnections() {
+    // Record button clicked
+    connect(ui->recordButton, SIGNAL(clicked()),
+            this, SLOT(toggleRecord()));
+    // Pause button clicked
+    connect(ui->pauseButton, SIGNAL(clicked()),
+            this, SLOT(togglePause()));
+    // Output Button clicked
+    connect(ui->outputButton, SIGNAL(clicked()),
+            this, SLOT(setOutputLocation()));
+    // Quality Radio Button
+
+
+}
+
+
+
+
+
+
 

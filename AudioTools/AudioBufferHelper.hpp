@@ -11,11 +11,8 @@
 
 
 qreal getPeakValue(const QAudioFormat& format);
-//QVector<qreal> getBufferLevels(const QAudioBuffer& buffer);
 std::vector<qreal> getBufferLevels(const QAudioBuffer& buffer);
 
-//template <class T>
-//QVector<qreal> getBufferLevels(const T *buffer, int frames, int channels);
 template <class T>
 std::vector<qreal> getBufferLevels(const T *buffer, int frames, int channels);
 

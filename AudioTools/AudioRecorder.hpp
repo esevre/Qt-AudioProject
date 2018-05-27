@@ -46,6 +46,7 @@ private slots:
 
 private:
     void clearAudioLevels();
+    void setupRecordingConnections();
 
 private:
     AudioUI *ui;
